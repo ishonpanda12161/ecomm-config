@@ -28,11 +28,13 @@ spring:
 #Keycloak access token
 keycloak:
   uri: ${KEYCLOAK_URI}
-  adminUsername: ${KEYCLOAK_USERNAME}
-  adminPassword: ${KEYCLOAK_PASSWORD}
+#  adminUsername: ${KEYCLOAK_USERNAME}
+#  adminPassword: ${KEYCLOAK_PASSWORD}
   realm: ${KEYCLOAK_REALM}
-  clientId: ${KEYCLOAK_CLIENT_ID}
-  client-uid: ${KEYCLOAK_CLIENT_UID}
+#  client-uid: ${KEYCLOAK_CLIENT_UID}
+  manage:
+    clientId: ${KEYCLOAK_CLIENT_ID}
+    secret: ${KEYCLOAK_CLIENT_SECRET}
 #Actuator + Zipkin
 management:
   health:
