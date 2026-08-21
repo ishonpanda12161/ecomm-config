@@ -31,7 +31,7 @@ keycloak:
 #  adminUsername: ${KEYCLOAK_USERNAME}
 #  adminPassword: ${KEYCLOAK_PASSWORD}
   realm: ${KEYCLOAK_REALM}
-#  client-uid: ${KEYCLOAK_CLIENT_UID}
+  client-uid: ${KEYCLOAK_CLIENT_UID}
   manage:
     clientId: ${KEYCLOAK_CLIENT_ID}
     secret: ${KEYCLOAK_CLIENT_SECRET}
