@@ -146,8 +146,8 @@ resilience4j:
       #Breaker for User
       userBreaker:
         register-health-indicator: true
-        sliding-window-size: 10
-        minimum-number-of-calls: 10
+        sliding-window-size: 5
+        minimum-number-of-calls: 5
         permitted-number-of-calls-in-half-open-state: 2
         wait-duration-in-open-state: 10s
         failure-rate-threshold: 50
