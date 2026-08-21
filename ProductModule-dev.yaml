@@ -1,0 +1,68 @@
+#Spring
+spring:
+  #Oauth2 - Keycloak
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: ${KEYCLOAK_JWT_ISSUER}
+  #Database POSTGRES
+  datasource:
+    url: ${POSTGRES_URL}
+    username: ${POSTGRES_USERNAME}
+    password: ${POSTGRES_PASSWORD}
+  jpa:
+    hibernate:
+      ddl-auto: update
+    #MessageQueue
+  rabbitmq:
+    host: ${RABBITMQ_HOST:localhost}
+    port: ${RABBITMQ_PORT:5672}
+    username: ${RABBITMQ_USERNAME:guest}
+    password: ${RABBITMQ_PASSWORD:guest}
+    connection-timeout: 30000
+    virtual-host: ${RABBITMQ_VHOST}
+  cloud:
+    refresh:
+      never-refreshable:
+        - com.netflix.discovery.EurekaClient
+        - com.netflix.discovery.DiscoveryClient
+        - org.springframework.cloud.config.server.config.ConfigServerHealthIndicator
+#Logging
+logging:
+  pattern:
+    file: '%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level [%thread] [%X{traceId}] %logger{36} - %msg%n'
+  level:
+    root: INFO
+  file:
+    name: Logs/${spring.application.name}.log
+
+
+#Actuator + Zipkin
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,busrefresh,refresh,prometheus
+  tracing:
+    sampling:
+      probability: 1.0
+
+#Eureka
+eureka:
+  client:
+    refresh:
+      enable: false
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: ${EUREKA_URL}
+  instance:
+    lease-renewal-interval-in-seconds: 5
+    lease-expiration-duration-in-seconds: 10
+    hostname: ${EUREKA_INSTANCE_HOSTNAME}
+    instanceId: ${spring.application.name}:${server.port}
+
+#Server
+server:
+  port: 8083

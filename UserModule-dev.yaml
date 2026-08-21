@@ -1,0 +1,76 @@
+#Spring
+spring:
+  #Oauth2 - Keycloak
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: ${KEYCLOAK_JWT_ISSUER}
+  #Database -> MongoDB
+  mongodb:
+    uri: ${MONGODB_URL}
+    database: userDB
+  #MessageQueue
+  rabbitmq:
+    host: ${RABBITMQ_HOST:localhost}
+    port: ${RABBITMQ_PORT:5672}
+    username: ${RABBITMQ_USERNAME:guest}
+    password: ${RABBITMQ_PASSWORD:guest}
+    connection-timeout: 30000
+    virtual-host: ${RABBITMQ_VHOST}
+  cloud:
+    refresh:
+      never-refreshable:
+        - com.netflix.discovery.EurekaClient
+        - com.netflix.discovery.DiscoveryClient
+        - org.springframework.cloud.config.server.config.ConfigServerHealthIndicator
+
+#Keycloak access token
+keycloak:
+  uri: ${KEYCLOAK_URI}
+  adminUsername: ${KEYCLOAK_USERNAME}
+  adminPassword: ${KEYCLOAK_PASSWORD}
+  realm: ${KEYCLOAK_REALM}
+  clientId: ${KEYCLOAK_CLIENT_ID}
+  client-uid: ${KEYCLOAK_CLIENT_UID}
+#Actuator + Zipkin
+management:
+  health:
+    mongodb:
+      enabled: false
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,busrefresh,refresh,prometheus
+  tracing:
+    sampling:
+      probability: 1.0
+
+#Eureka
+eureka:
+  client:
+    refresh:
+      enable: false
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: ${EUREKA_URL}
+  instance:
+    lease-renewal-interval-in-seconds: 5
+    lease-expiration-duration-in-seconds: 10
+    hostname: ${EUREKA_INSTANCE_HOSTNAME}
+    instanceId: ${spring.application.name}:${server.port}
+
+#Logging
+logging:
+  pattern:
+    file: '%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level [%thread] [%X{traceId}] %logger{36} - %msg%n'
+  level:
+    root: INFO
+  file:
+    name: Logs/${spring.application.name}.log
+
+#Server
+server:
+  port: 8082
+

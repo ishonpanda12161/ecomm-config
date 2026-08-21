@@ -1,0 +1,94 @@
+#Server
+server:
+  port: 8080
+
+#Keycloak
+keycloak:
+  clientId: 'oauth2-ecomm-pkce'
+#Gateway
+gateway:
+  ratelimit:
+    replenish-rate: 100
+    burst-capacity: 250
+spring:
+  data:
+    redis:
+      url: ${REDIS_URL}
+#      host: localhost
+#      port: 6500
+  cloud:
+    refresh:
+      never-refreshable:
+        - com.netflix.discovery.EurekaClient
+        - com.netflix.discovery.DiscoveryClient
+        - org.springframework.cloud.config.server.config.ConfigServerHealthIndicator
+#    gateway:
+#      server:
+#        webflux:
+#          routes:
+#          - id: user-module
+#            uri: lb://USERMODULE
+#            predicates:
+#              - Path=/api/user/**,/api/address/**
+#          - id: product-module
+#            uri: lb://PRODUCTMODULE
+#            predicates:
+#              - Path=/api/category/**,/api/product/**
+#          - id: order-module
+#            uri: lb://ORDERMODULE
+#            predicates:
+#              - Path=/api/cart/**,/api/order/**
+
+#Actuator + Zipkin
+management:
+  endpoint:
+    health:
+      show-details: always
+      show-components: always
+      circuitbreakers:
+        enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,busrefresh,refresh,prometheus,gateway,circuitbreakers
+  tracing:
+    sampling:
+      probability: 1.0
+
+#Eureka
+eureka:
+  client:
+    refresh:
+      enable: false
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: ${EUREKA_URL}
+  instance:
+    lease-renewal-interval-in-seconds: 5
+    lease-expiration-duration-in-seconds: 10
+    hostname: localhost
+    instanceId: ${spring.application.name}:${server.port}
+
+#Logging
+logging:
+  pattern:
+    file: '%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level [%thread] [%X{traceId}] %logger{36} - %msg%n'
+  level:
+    root: INFO
+  file:
+    name: Logs/${spring.application.name}.log
+
+#Circuit Breaker
+resilience4j:
+  circuitbreaker:
+    instances:
+      gatewayBreaker:
+        register-health-indicator: true
+        sliding-window-size: 10
+        minimum-number-of-calls: 10
+        permitted-number-of-calls-in-half-open-state: 3
+        wait-duration-in-open-state: 10s
+        failure-rate-threshold: 50
+        automatic-transition-from-open-to-half-open-enabled: true
+        sliding-window-type: count_based
