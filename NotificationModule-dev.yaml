@@ -33,8 +33,8 @@ spring:
 #            loginModule: org.apache.kafka.common.security.scram.ScramLoginModule
 #            controlFlag: required
 #            options:
-#              username: "avnadmin"
-#              password: "AVNS_7LApTBG7qsioA-B1rW-"
+#              username:
+#              password:
 #          configuration:
 #            security.protocol: SASL_SSL
 #            sasl.mechanism: SCRAM-SHA-256
@@ -79,6 +79,23 @@ logging:
     root: INFO
   file:
     name: Logs/${spring.application.name}.log
+
+#Actuator + Zipkin
+management:
+  endpoint:
+    health:
+      show-details: always
+      show-components: always
+      circuitbreakers:
+        enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,busrefresh,refresh,prometheus,circuitbreakers
+  tracing:
+    sampling:
+      probability: 1.0
+
 
 #Eureka
 eureka:

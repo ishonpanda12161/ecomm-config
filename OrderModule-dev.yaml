@@ -54,12 +54,12 @@ spring:
 #            loginModule: org.apache.kafka.common.security.scram.ScramLoginModule
 #            controlFlag: required
 #            options:
-#              username: "avnadmin"
-#              password: "AVNS_7LApTBG7qsioA-B1rW-"
+#              username:
+#              password:
 #          configuration:
 #            security.protocol: SASL_SSL
 #            sasl.mechanism: SCRAM-SHA-256
-#            ssl.truststore.location: 'C:\Users\Admin\Desktop\CAREER\PROJECTS\FAISAL_SPRING\Ecommerce Udemy\microservice_backend\NotificationModule\src\main\resources\ca.pem'
+#            ssl.truststore.location: 'ca.pem'
 #            ssl.truststore.type: 'PEM'
 
 #      rabbit:
